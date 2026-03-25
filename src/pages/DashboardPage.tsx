@@ -2,7 +2,7 @@ import { motion } from 'framer-motion'
 import { useAnalytics } from '../api/analytics.hooks'
 import { Card } from '../shared/ui/Card'
 
-const nf = new Intl.NumberFormat()
+const nf = new Intl.NumberFormat('ru-RU')
 
 function Metric({ label, value }: { label: string; value: string }) {
   return (
@@ -24,8 +24,8 @@ export function DashboardPage() {
     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.22 }}>
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-semibold tracking-tight text-white">Overview</h1>
-          <p className="mt-2 max-w-2xl text-sm text-slate-300">System status and usage</p>
+          <h1 className="text-3xl font-semibold tracking-tight text-white">Обзор</h1>
+          <p className="mt-2 max-w-2xl text-sm text-slate-300">Статистика и загрузка системы</p>
         </div>
 
         <div className="grid gap-6 lg:grid-cols-3">
@@ -37,19 +37,19 @@ export function DashboardPage() {
               />
             ))
           ) : analytics.isError ? (
-            <Card title="Analytics" description="Unable to load analytics right now" className="lg:col-span-3">
-              <div className="text-sm text-slate-300">Please try again in a moment.</div>
+            <Card title="Аналитика" description="Не удалось загрузить данные" className="lg:col-span-3">
+              <div className="text-sm text-slate-300">Попробуйте обновить страницу чуть позже.</div>
             </Card>
           ) : (
             <>
-              <Card title="Total Chats" description="All conversations">
-                <Metric label="Total" value={nf.format(analytics.data?.totalChats ?? 0)} />
+              <Card title="Чаты" description="Все диалоги">
+                <Metric label="Всего" value={nf.format(analytics.data?.totalChats ?? 0)} />
               </Card>
-              <Card title="Total Messages" description="All messages across chats">
-                <Metric label="Total" value={nf.format(analytics.data?.totalMessages ?? 0)} />
+              <Card title="Сообщения" description="Сообщения по всем чатам">
+                <Metric label="Всего" value={nf.format(analytics.data?.totalMessages ?? 0)} />
               </Card>
-              <Card title="Active Assistants" description="Assistants created">
-                <Metric label="Active" value={nf.format(analytics.data?.activeAssistants ?? 0)} />
+              <Card title="Ассистенты" description="Созданные ассистенты">
+                <Metric label="Активных" value={nf.format(analytics.data?.activeAssistants ?? 0)} />
               </Card>
             </>
           )}

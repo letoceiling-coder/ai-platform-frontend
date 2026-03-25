@@ -44,7 +44,7 @@ export function DocumentsPage() {
   async function onCreate(e: React.FormEvent) {
     e.preventDefault()
     if (!assistantIdValue) {
-      toast({ type: 'error', title: 'Assistant ID is required' })
+      toast({ type: 'error', title: 'Укажите ID ассистента' })
       return
     }
     const t = title.trim()
@@ -53,13 +53,13 @@ export function DocumentsPage() {
 
     try {
       await createDoc.mutateAsync({ assistantId: assistantIdValue, title: t, type, content: c })
-      toast({ type: 'success', title: 'Document added' })
+      toast({ type: 'success', title: 'Документ добавлен' })
       setTitle('')
       setContent('')
       setType('manual')
       setIsOpen(false)
     } catch {
-      toast({ type: 'error', title: 'Could not create document' })
+      toast({ type: 'error', title: 'Не удалось создать документ' })
     }
   }
 
@@ -68,8 +68,8 @@ export function DocumentsPage() {
       <div className="space-y-6">
         <div className="flex items-end justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-semibold tracking-tight text-white">Knowledge Base</h1>
-            <p className="mt-2 max-w-2xl text-sm text-slate-300">Documents linked to an assistant for retrieval</p>
+            <h1 className="text-3xl font-semibold tracking-tight text-white">База знаний</h1>
+            <p className="mt-2 max-w-2xl text-sm text-slate-300">Документы ассистента для поиска ответов</p>
           </div>
           <Button
             variant="primary"
@@ -81,22 +81,22 @@ export function DocumentsPage() {
             }}
             disabled={createDoc.isPending || deleteDoc.isPending}
           >
-            Add document
+            Добавить документ
           </Button>
         </div>
 
-        <Card title="Assistant" description="Choose assistant to manage documents">
+        <Card title="Ассистент" description="Выберите ассистента для документов">
           <Input
-            label="Assistant ID"
-            placeholder="Paste assistantId"
+            label="ID ассистента"
+            placeholder="Вставьте assistantId"
             value={assistantId}
             onChange={(e) => setAssistantId(e.target.value)}
           />
         </Card>
 
         {!assistantIdValue ? (
-          <Card title="Documents" description="No assistant selected">
-            <div className="text-sm text-slate-300">Enter an assistant ID to view and manage documents.</div>
+          <Card title="Документы" description="Ассистент не выбран">
+            <div className="text-sm text-slate-300">Введите ID ассистента, чтобы управлять документами.</div>
           </Card>
         ) : docsQuery.isLoading ? (
           <div className="grid gap-6 lg:grid-cols-3">
@@ -108,15 +108,15 @@ export function DocumentsPage() {
             ))}
           </div>
         ) : docsQuery.isError ? (
-          <Card title="Documents" description="Unable to load documents right now">
-            <div className="text-sm text-slate-300">Please try again in a moment.</div>
+          <Card title="Документы" description="Не удалось загрузить">
+            <div className="text-sm text-slate-300">Попробуйте обновить страницу чуть позже.</div>
           </Card>
         ) : docs.length === 0 ? (
-          <Card title="Documents" description="No documents yet">
+          <Card title="Документы" description="Пока пусто">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <div className="text-sm text-slate-300">Add a document to improve assistant answers.</div>
+              <div className="text-sm text-slate-300">Добавьте документ — ответы станут точнее.</div>
               <Button variant="primary" onClick={() => setIsOpen(true)}>
-                Add document
+                Добавить документ
               </Button>
             </div>
           </Card>
@@ -137,11 +137,11 @@ export function DocumentsPage() {
                       <div className="min-w-0">
                         <div className="truncate text-sm font-semibold tracking-tight text-white">{d.title}</div>
                         <div className="mt-1 text-xs text-slate-300">
-                          {d.type} • Created {formatDate(d.createdAt)}
+                          {d.type} • Создан {formatDate(d.createdAt)}
                         </div>
                         {typeof count === 'number' ? (
                           <div className="mt-3 inline-flex items-center rounded-2xl border border-white/10 bg-slate-950/30 px-3 py-1.5 text-xs text-slate-200">
-                            {count} chunks
+                            {count} фрагм.
                           </div>
                         ) : null}
                       </div>
@@ -151,14 +151,14 @@ export function DocumentsPage() {
                         size="sm"
                         disabled={deleteDoc.isPending || createDoc.isPending}
                         onClick={() => {
-                          if (!window.confirm('Delete this document?')) return
+                          if (!window.confirm('Удалить этот документ?')) return
                           deleteDoc.mutate(d.id, {
-                            onSuccess: () => toast({ type: 'success', title: 'Document deleted' }),
-                            onError: () => toast({ type: 'error', title: 'Could not delete document' }),
+                            onSuccess: () => toast({ type: 'success', title: 'Документ удалён' }),
+                            onError: () => toast({ type: 'error', title: 'Не удалось удалить документ' }),
                           })
                         }}
                       >
-                        Delete
+                        Удалить
                       </Button>
                     </div>
                   </div>
@@ -198,16 +198,16 @@ export function DocumentsPage() {
               className="relative w-full max-w-2xl rounded-2xl border border-white/10 bg-slate-950/60 shadow-[0_30px_80px_rgba(0,0,0,0.65)] backdrop-blur-xl"
             >
               <div className="border-b border-white/10 p-6">
-                <div className="text-sm font-semibold tracking-tight text-white">Add document</div>
-                <div className="mt-1 text-xs text-slate-300">Manual content is indexed into chunks for retrieval.</div>
+                <div className="text-sm font-semibold tracking-tight text-white">Новый документ</div>
+                <div className="mt-1 text-xs text-slate-300">Текст разбивается на фрагменты для поиска (RAG).</div>
               </div>
 
               <form className="space-y-4 p-6" onSubmit={onCreate}>
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <Input label="Title" placeholder="Pricing policy" value={title} onChange={(e) => setTitle(e.target.value)} />
+                  <Input label="Заголовок" placeholder="Политика цен" value={title} onChange={(e) => setTitle(e.target.value)} />
 
                   <label className="block">
-                    <div className="text-sm text-slate-200">Type</div>
+                    <div className="text-sm text-slate-200">Тип</div>
                     <select
                       value={type}
                       onChange={(e) => setType(e.target.value as DocumentType)}
@@ -221,27 +221,27 @@ export function DocumentsPage() {
                 </div>
 
                 <label className="block">
-                  <div className="text-sm text-slate-200">Content</div>
+                  <div className="text-sm text-slate-200">Содержание</div>
                   <textarea
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
-                    placeholder="Paste knowledge content here…"
+                    placeholder="Вставьте текст базы знаний…"
                     rows={8}
                     className="mt-1 w-full resize-none rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-3 text-sm text-white/90 outline-none placeholder:text-slate-500 focus:border-white/20 focus:ring-2 focus:ring-indigo-500/20"
                   />
-                  <div className="mt-1 text-xs text-slate-400">Keep it concise and structured for best retrieval.</div>
+                  <div className="mt-1 text-xs text-slate-400">Короткие абзацы дают лучший поиск.</div>
                 </label>
 
                 <div className="flex items-center justify-end gap-2">
                   <Button type="button" variant="secondary" onClick={() => setIsOpen(false)} disabled={createDoc.isPending}>
-                    Cancel
+                    Отмена
                   </Button>
                   <Button
                     type="submit"
                     variant="primary"
                     disabled={createDoc.isPending || !assistantIdValue || !title.trim() || !content.trim()}
                   >
-                    {createDoc.isPending ? 'Adding…' : 'Add'}
+                    {createDoc.isPending ? 'Добавление…' : 'Добавить'}
                   </Button>
                 </div>
               </form>

@@ -20,7 +20,7 @@ function maskKeyForDropdown(value: string) {
 }
 
 function keyDisplayName(k: ApiKey) {
-  return k.label?.trim() || 'API key'
+  return k.label?.trim() || 'API ключ'
 }
 
 export function WidgetPage() {
@@ -79,9 +79,9 @@ export function WidgetPage() {
     if (!key || !script) return
     try {
       await navigator.clipboard.writeText(script)
-      toast({ type: 'success', title: 'Copied!' })
+      toast({ type: 'success', title: 'Скопировано!' })
     } catch {
-      toast({ type: 'error', title: 'Could not copy script' })
+      toast({ type: 'error', title: 'Не удалось скопировать скрипт' })
     }
   }
 
@@ -100,9 +100,9 @@ export function WidgetPage() {
     const allowedDomains = parseDomains(allowedDomainsText)
     try {
       await setDomains.mutateAsync({ id: selectedKeyId, input: { allowedDomains } })
-      toast({ type: 'success', title: 'Allowed domains updated' })
+      toast({ type: 'success', title: 'Домены обновлены' })
     } catch {
-      toast({ type: 'error', title: 'Could not save domains' })
+      toast({ type: 'error', title: 'Не удалось сохранить домены' })
     }
   }
 
@@ -110,15 +110,17 @@ export function WidgetPage() {
     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.22 }}>
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-semibold tracking-tight text-white">Widget</h1>
-          <p className="mt-2 max-w-2xl text-sm text-slate-300">Embed the assistant on your site — pick a key, copy the snippet</p>
+          <h1 className="text-3xl font-semibold tracking-tight text-white">Виджет</h1>
+          <p className="mt-2 max-w-2xl text-sm text-slate-300">
+            Встройте ассистента на сайт — выберите ключ и скопируйте код
+          </p>
         </div>
 
         <div className="grid gap-6 lg:grid-cols-3">
-          <Card title="Settings" description="Assistant and API key" className="lg:col-span-1">
+          <Card title="Настройки" description="Ассистент и API ключ" className="lg:col-span-1">
             <div className="space-y-4">
               <label className="block">
-                <div className="text-sm text-slate-200">Assistant</div>
+                <div className="text-sm text-slate-200">Ассистент</div>
                 <select
                   value={selectedAssistantId}
                   onChange={(e) => {
@@ -133,15 +135,15 @@ export function WidgetPage() {
                     </option>
                   ))}
                 </select>
-                {assistants.isLoading ? <div className="mt-2 text-xs text-slate-400">Loading assistants…</div> : null}
-                {assistants.isError ? <div className="mt-2 text-xs text-rose-300">Could not load assistants.</div> : null}
+                {assistants.isLoading ? <div className="mt-2 text-xs text-slate-400">Загрузка ассистентов…</div> : null}
+                {assistants.isError ? <div className="mt-2 text-xs text-rose-300">Не удалось загрузить ассистентов.</div> : null}
                 {!assistants.isLoading && assistantOptions.length === 0 ? (
-                  <div className="mt-2 text-xs text-amber-200/90">Create an assistant first.</div>
+                  <div className="mt-2 text-xs text-amber-200/90">Сначала создайте ассистента.</div>
                 ) : null}
               </label>
 
               <label className="block">
-                <div className="text-sm text-slate-200">API key</div>
+                <div className="text-sm text-slate-200">API ключ</div>
                 <select
                   value={selectedKeyId}
                   onChange={(e) => setApiKeyId(e.target.value)}
@@ -158,15 +160,17 @@ export function WidgetPage() {
                     )
                   })}
                 </select>
-                {keysQuery.isLoading ? <div className="mt-2 text-xs text-slate-400">Loading keys…</div> : null}
-                {keysQuery.isError ? <div className="mt-2 text-xs text-rose-300">Could not load keys.</div> : null}
+                {keysQuery.isLoading ? <div className="mt-2 text-xs text-slate-400">Загрузка ключей…</div> : null}
+                {keysQuery.isError ? <div className="mt-2 text-xs text-rose-300">Не удалось загрузить ключи.</div> : null}
                 {!keysQuery.isLoading && noKeysForAssistant ? (
-                  <div className="mt-2 text-xs text-amber-200/90">No API keys for this assistant. Generate one on the API Keys page.</div>
+                  <div className="mt-2 text-xs text-amber-200/90">
+                    Нет ключей. Создайте на странице «API ключи».
+                  </div>
                 ) : null}
               </label>
 
               <label className="block">
-                <div className="text-sm text-slate-200">Allowed domains</div>
+                <div className="text-sm text-slate-200">Разрешённые домены</div>
                 <textarea
                   value={allowedDomainsText}
                   onChange={(e) => setAllowedDomainsText(e.target.value)}
@@ -175,7 +179,8 @@ export function WidgetPage() {
                   className="mt-1 h-28 w-full resize-none rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-2.5 text-sm text-white/90 outline-none focus:border-white/20 focus:ring-2 focus:ring-indigo-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
                 />
                 <div className="mt-2 text-xs text-slate-400">
-                  Comma/newline separated. Domain check uses <span className="text-slate-200">origin.includes(domain)</span>.
+                  Через запятую или с новой строки. Проверка:{' '}
+                  <span className="text-slate-200">origin.includes(домен)</span>.
                 </div>
                 <div className="mt-3">
                   <Button
@@ -184,14 +189,14 @@ export function WidgetPage() {
                     onClick={onSaveDomains}
                     disabled={!selectedKey?.key || setDomains.isPending}
                   >
-                    Save domains
+                    Сохранить домены
                   </Button>
                 </div>
               </label>
             </div>
           </Card>
 
-          <Card title="Embed script" description="Paste into your site HTML" className="lg:col-span-2">
+          <Card title="Код для вставки" description="Вставьте в HTML сайта" className="lg:col-span-2">
             <div className="space-y-4">
               <div className="rounded-2xl border border-white/10 bg-slate-950/30 p-4">
                 {script ? (
@@ -200,7 +205,7 @@ export function WidgetPage() {
                   </pre>
                 ) : (
                   <p className="text-sm text-slate-400">
-                    Select an API key to get your embed script.
+                    Выберите API ключ, чтобы получить код вставки.
                   </p>
                 )}
               </div>
@@ -217,7 +222,7 @@ export function WidgetPage() {
                     disabled={!key}
                     className="disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  Copy script
+                  Скопировать скрипт
                 </Button>
               </div>
             </div>

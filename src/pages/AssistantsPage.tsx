@@ -26,11 +26,11 @@ export function AssistantsPage() {
     if (!trimmed) return
     try {
       await createAssistant.mutateAsync({ name: trimmed })
-      toast({ type: 'success', title: 'Assistant created' })
+      toast({ type: 'success', title: 'Ассистент создан' })
       setName('')
       setIsCreateOpen(false)
     } catch {
-      toast({ type: 'error', title: 'Could not create assistant' })
+      toast({ type: 'error', title: 'Не удалось создать ассистента' })
     }
   }
 
@@ -39,15 +39,15 @@ export function AssistantsPage() {
       <div className="space-y-6">
         <div className="flex items-end justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-semibold tracking-tight text-white">Assistants</h1>
-            <p className="mt-2 max-w-2xl text-sm text-slate-300">Design, configure, and deploy AI assistants</p>
+            <h1 className="text-3xl font-semibold tracking-tight text-white">Ассистенты</h1>
+            <p className="mt-2 max-w-2xl text-sm text-slate-300">Настраивайте и подключайте AI-ассистентов</p>
           </div>
           <Button
             variant="primary"
             onClick={() => setIsCreateOpen(true)}
             disabled={assistants.isLoading || createAssistant.isPending || deleteAssistant.isPending}
           >
-            + Create Assistant
+            + Создать ассистента
           </Button>
         </div>
 
@@ -61,17 +61,15 @@ export function AssistantsPage() {
             ))}
           </div>
         ) : assistants.isError ? (
-          <Card title="Assistants" description="Unable to load assistants right now">
-            <div className="text-sm text-slate-300">Please try again in a moment.</div>
+          <Card title="Ассистенты" description="Сейчас список недоступен">
+            <div className="text-sm text-slate-300">Попробуйте обновить страницу через минуту.</div>
           </Card>
         ) : sorted.length === 0 ? (
-          <Card title="Assistants" description="Create your first assistant">
+          <Card title="Ассистенты" description="Создайте первого ассистента">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <div className="text-sm text-slate-300">
-                Assistants help you ship repeatable workflows with consistent behavior.
-              </div>
+              <div className="text-sm text-slate-300">У вас пока нет ассистентов</div>
               <Button variant="primary" onClick={() => setIsCreateOpen(true)}>
-                + Create Assistant
+                Создать ассистента
               </Button>
             </div>
           </Card>
@@ -91,7 +89,7 @@ export function AssistantsPage() {
                     <div>
                       <div className="text-sm font-semibold tracking-tight text-white">{a.name}</div>
                       <div className="mt-1 text-xs text-slate-300">
-                        Created{' '}
+                        Создан{' '}
                         {Number.isFinite(Date.parse(a.createdAt))
                           ? new Date(a.createdAt).toLocaleString()
                           : a.createdAt}
@@ -104,20 +102,20 @@ export function AssistantsPage() {
                       disabled={deleteAssistant.isPending || createAssistant.isPending}
                       onClick={() => {
                         deleteAssistant.mutate(a.id, {
-                          onSuccess: () => toast({ type: 'success', title: 'Assistant deleted' }),
-                          onError: () => toast({ type: 'error', title: 'Could not delete assistant' }),
+                          onSuccess: () => toast({ type: 'success', title: 'Ассистент удалён' }),
+                          onError: () => toast({ type: 'error', title: 'Не удалось удалить ассистента' }),
                         })
                       }}
                       className="opacity-80 hover:opacity-100"
                     >
-                      Delete
+                      Удалить
                     </Button>
                   </div>
 
                   <div className="mt-5 h-[1px] w-full bg-white/10" />
 
                   <div className="mt-4 text-xs text-slate-300">
-                    Ready for tools, prompts, and permissions.
+                    Готов к сценариям, промптам и виджету.
                   </div>
                 </div>
 
@@ -155,20 +153,20 @@ export function AssistantsPage() {
               className="relative w-full max-w-md rounded-2xl border border-white/10 bg-slate-950/60 shadow-[0_30px_80px_rgba(0,0,0,0.65)] backdrop-blur-xl"
             >
               <div className="border-b border-white/10 p-6">
-                <div className="text-sm font-semibold tracking-tight text-white">Create assistant</div>
-                <div className="mt-1 text-xs text-slate-300">Give it a clear, reusable name.</div>
+                <div className="text-sm font-semibold tracking-tight text-white">Новый ассистент</div>
+                <div className="mt-1 text-xs text-slate-300">Укажите понятное имя — его можно изменить позже.</div>
               </div>
 
               <form className="space-y-4 p-6" onSubmit={onCreateSubmit}>
                 <Input
-                  label="Name"
-                  placeholder="Sales Copilot"
+                  label="Имя"
+                  placeholder="Мой ассистент"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
 
                 {createAssistant.isError ? (
-                  <div className="text-sm text-rose-300">Could not create assistant. Try again.</div>
+                  <div className="text-sm text-rose-300">Не удалось создать. Попробуйте снова.</div>
                 ) : null}
 
                 <div className="flex items-center justify-end gap-2">
@@ -178,10 +176,10 @@ export function AssistantsPage() {
                     onClick={() => setIsCreateOpen(false)}
                     disabled={createAssistant.isPending}
                   >
-                    Cancel
+                    Отмена
                   </Button>
                   <Button type="submit" variant="primary" disabled={createAssistant.isPending || !name.trim()}>
-                    {createAssistant.isPending ? 'Creating…' : 'Create'}
+                    {createAssistant.isPending ? 'Создание…' : 'Создать'}
                   </Button>
                 </div>
               </form>

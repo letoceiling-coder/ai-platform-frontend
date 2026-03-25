@@ -45,18 +45,18 @@ export function ApiKeysPage() {
       const res = await createKey.mutateAsync({ label: trimmed })
       if (!res?.key || typeof res.key !== 'string') throw new Error('Missing key')
       setCreated(res)
-      toast({ type: 'success', title: 'API key generated' })
+      toast({ type: 'success', title: 'API ключ создан' })
     } catch {
-      toast({ type: 'error', title: 'Could not generate API key' })
+      toast({ type: 'error', title: 'Не удалось создать ключ' })
     }
   }
 
   async function copyOnce(value: string) {
     try {
       await navigator.clipboard.writeText(value)
-      toast({ type: 'success', title: 'Copied!' })
+      toast({ type: 'success', title: 'Скопировано!' })
     } catch {
-      toast({ type: 'error', title: 'Could not copy to clipboard' })
+      toast({ type: 'error', title: 'Не удалось скопировать' })
     }
   }
 
@@ -65,8 +65,8 @@ export function ApiKeysPage() {
       <div className="space-y-6">
         <div className="flex items-end justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-semibold tracking-tight text-white">API Keys</h1>
-            <p className="mt-2 max-w-2xl text-sm text-slate-300">Keys for secure access to the platform API</p>
+            <h1 className="text-3xl font-semibold tracking-tight text-white">API ключи</h1>
+            <p className="mt-2 max-w-2xl text-sm text-slate-300">Ключи для доступа к API платформы</p>
           </div>
           <Button
             variant="primary"
@@ -77,14 +77,14 @@ export function ApiKeysPage() {
             }}
             disabled={keysQuery.isLoading || createKey.isPending || deleteKey.isPending}
           >
-            Generate API Key
+            Создать API ключ
           </Button>
         </div>
 
-        <Card title="Security" description="Save this key securely">
+        <Card title="Безопасность" description="Храните ключ в секрете">
           <div className="text-sm text-slate-300">
-            Full keys are shown <span className="text-white/90">only once</span> at creation time. After reload, keys are
-            masked.
+            Полный ключ показывается <span className="text-white/90">только один раз</span> при создании. После
+            перезагрузки отображается маска.
           </div>
         </Card>
 
@@ -98,15 +98,15 @@ export function ApiKeysPage() {
             ))}
           </div>
         ) : keysQuery.isError ? (
-          <Card title="API Keys" description="Unable to load keys right now">
-            <div className="text-sm text-slate-300">Please try again in a moment.</div>
+          <Card title="API ключи" description="Список временно недоступен">
+            <div className="text-sm text-slate-300">Попробуйте обновить страницу чуть позже.</div>
           </Card>
         ) : keys.length === 0 ? (
-          <Card title="API Keys" description="Generate your first API key">
+          <Card title="API ключи" description="Создайте первый ключ">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <div className="text-sm text-slate-300">Create a key to authenticate requests.</div>
+              <div className="text-sm text-slate-300">Нет API ключей</div>
               <Button variant="primary" onClick={() => setIsOpen(true)}>
-                Generate API Key
+                Создать ключ
               </Button>
             </div>
           </Card>
@@ -124,7 +124,7 @@ export function ApiKeysPage() {
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
                       <div className="truncate text-sm font-semibold tracking-tight text-white">{k.label}</div>
-                      <div className="mt-1 text-xs text-slate-300">Created {formatDate(k.createdAt)}</div>
+                      <div className="mt-1 text-xs text-slate-300">Создан {formatDate(k.createdAt)}</div>
                       <div className="mt-3 rounded-2xl border border-white/10 bg-slate-950/30 px-3 py-2 font-mono text-xs text-slate-200">
                         {maskKey(k.key ?? '') || 'sk_live_****'}
                       </div>
@@ -134,14 +134,14 @@ export function ApiKeysPage() {
                       size="sm"
                       disabled={deleteKey.isPending || createKey.isPending}
                       onClick={() => {
-                        if (!window.confirm('Are you sure?')) return
+                        if (!window.confirm('Удалить этот ключ?')) return
                         deleteKey.mutate(k.id, {
-                          onSuccess: () => toast({ type: 'success', title: 'API key deleted' }),
-                          onError: () => toast({ type: 'error', title: 'Could not delete API key' }),
+                          onSuccess: () => toast({ type: 'success', title: 'Ключ удалён' }),
+                          onError: () => toast({ type: 'error', title: 'Не удалось удалить ключ' }),
                         })
                       }}
                     >
-                      Delete
+                      Удалить
                     </Button>
                   </div>
                 </div>
@@ -179,22 +179,22 @@ export function ApiKeysPage() {
               className="relative w-full max-w-lg rounded-2xl border border-white/10 bg-slate-950/60 shadow-[0_30px_80px_rgba(0,0,0,0.65)] backdrop-blur-xl"
             >
               <div className="border-b border-white/10 p-6">
-                <div className="text-sm font-semibold tracking-tight text-white">Generate API key</div>
-                <div className="mt-1 text-xs text-slate-300">Save this key securely. It will be shown only once.</div>
+                <div className="text-sm font-semibold tracking-tight text-white">Создать API ключ</div>
+                <div className="mt-1 text-xs text-slate-300">Сохраните ключ — он показывается только один раз.</div>
               </div>
 
               <div className="space-y-4 p-6">
                 {created ? (
                   <div className="space-y-3">
                     <div className="rounded-2xl border border-amber-500/20 bg-amber-500/10 p-4 text-sm text-amber-100/90">
-                      Save this key securely. You won’t be able to see it again after closing this dialog.
+                      Сохраните ключ в надёжном месте. После закрытия окна повторно увидеть его нельзя.
                     </div>
                     <div className="rounded-2xl border border-white/10 bg-slate-950/30 p-4 font-mono text-sm text-white/90">
                       {created.key}
                     </div>
                     <div className="flex items-center justify-end gap-2">
                       <Button variant="secondary" onClick={() => copyOnce(created.key)}>
-                        Copy to clipboard
+                        Скопировать
                       </Button>
                       <Button
                         variant="primary"
@@ -204,19 +204,19 @@ export function ApiKeysPage() {
                           setLabel('')
                         }}
                       >
-                        Done
+                        Готово
                       </Button>
                     </div>
                   </div>
                 ) : (
                   <form className="space-y-4" onSubmit={onGenerate}>
-                    <Input label="Label" placeholder="Production key" value={label} onChange={(e) => setLabel(e.target.value)} />
+                    <Input label="Название" placeholder="Production" value={label} onChange={(e) => setLabel(e.target.value)} />
                     <div className="flex items-center justify-end gap-2">
                       <Button type="button" variant="secondary" onClick={() => setIsOpen(false)} disabled={createKey.isPending}>
-                        Cancel
+                        Отмена
                       </Button>
                       <Button type="submit" variant="primary" disabled={createKey.isPending || !label.trim()}>
-                        {createKey.isPending ? 'Generating…' : 'Generate'}
+                        {createKey.isPending ? 'Создание…' : 'Создать'}
                       </Button>
                     </div>
                   </form>

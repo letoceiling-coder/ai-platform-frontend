@@ -25,10 +25,10 @@ const STORAGE_PREFIX = 'assistant.behavior.'
 
 export function defaultBehaviorSteps(): BehaviorStep[] {
   return [
-    { key: 'greeting', title: 'Greeting', prompt: '', collapsed: false },
-    { key: 'qualification', title: 'Qualification', prompt: '', collapsed: false },
-    { key: 'offer', title: 'Offer', prompt: '', collapsed: false },
-    { key: 'close', title: 'Close', prompt: '', collapsed: false },
+    { key: 'greeting', title: 'Приветствие', prompt: '', collapsed: false },
+    { key: 'qualification', title: 'Квалификация', prompt: '', collapsed: false },
+    { key: 'offer', title: 'Предложение', prompt: '', collapsed: false },
+    { key: 'close', title: 'Завершение', prompt: '', collapsed: false },
   ]
 }
 

@@ -51,7 +51,7 @@ export function ChatsPage() {
 
     s.on('connect_error', () => {
       // avoid spam; show only once per mount
-      toast({ type: 'error', title: 'Realtime connection failed' })
+      toast({ type: 'error', title: 'Ошибка подключения в реальном времени' })
     })
 
     s.on('chat:token', (payload: { chatId?: string; token?: string; content?: string }) => {
@@ -121,7 +121,7 @@ export function ChatsPage() {
     if (!message || !activeChatId) return
 
     if (!apiKey.trim()) {
-      toast({ type: 'error', title: 'API key is required to send messages' })
+      toast({ type: 'error', title: 'Нужен API ключ для отправки сообщений' })
       return
     }
 
@@ -135,7 +135,7 @@ export function ChatsPage() {
       socketRef.current?.emit('chat:message', { message, chatId: activeChatId, apiKey: apiKey.trim() })
       socketRef.current?.emit('chat:typing', { chatId: activeChatId })
     } catch {
-      toast({ type: 'error', title: 'Could not send message' })
+      toast({ type: 'error', title: 'Не удалось отправить сообщение' })
       setIsSending(false)
       setIsAssistantTyping(false)
     }
@@ -145,16 +145,16 @@ export function ChatsPage() {
     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.22 }}>
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-semibold tracking-tight text-white">Chats</h1>
-          <p className="mt-2 max-w-2xl text-sm text-slate-300">Conversations, history, and context management</p>
+          <h1 className="text-3xl font-semibold tracking-tight text-white">Чаты</h1>
+          <p className="mt-2 max-w-2xl text-sm text-slate-300">Диалоги, история и контекст</p>
         </div>
 
         <div className="grid gap-6 lg:grid-cols-3">
-          <Card title="Threads" description="Select a conversation" className="lg:col-span-1">
+          <Card title="Диалоги" description="Выберите чат" className="lg:col-span-1">
             <div className="space-y-3">
               <Input
-                label="Assistant ID (optional)"
-                placeholder="Filter chats by assistantId"
+                label="ID ассистента (необязательно)"
+                placeholder="Фильтр по assistantId"
                 value={assistantId}
                 onChange={(e) => setAssistantId(e.target.value)}
               />
@@ -167,11 +167,11 @@ export function ChatsPage() {
                 </div>
               ) : chats.isError ? (
                 <div className="rounded-2xl border border-white/10 bg-slate-950/30 p-4 text-sm text-slate-300">
-                  Could not load chats.
+                  Не удалось загрузить чаты.
                 </div>
               ) : chatList.length === 0 ? (
                 <div className="rounded-2xl border border-white/10 bg-slate-950/30 p-4 text-sm text-slate-300">
-                  No chats yet.
+                  Нет диалогов
                 </div>
               ) : (
                 <div className="space-y-2 pt-2">
@@ -191,9 +191,9 @@ export function ChatsPage() {
                       >
                         <div className="flex items-start justify-between gap-3">
                           <div className="min-w-0">
-                            <div className="truncate text-sm font-medium text-white">Chat {c.id.slice(0, 8)}</div>
+                            <div className="truncate text-sm font-medium text-white">Чат {c.id.slice(0, 8)}</div>
                             <div className="mt-1 truncate text-xs text-slate-300">
-                              {c.lastMessage ?? 'No messages yet'}
+                              {c.lastMessage ?? 'Нет сообщений'}
                             </div>
                           </div>
                           <div className="shrink-0 text-xs text-slate-400">{formatTime(c.updatedAt ?? c.createdAt)}</div>
@@ -207,15 +207,15 @@ export function ChatsPage() {
           </Card>
 
           <Card
-            title="Conversation"
-            description={activeChatId ? `Chat ${activeChatId}` : 'Pick a chat to start'}
+            title="Переписка"
+            description={activeChatId ? `Чат ${activeChatId}` : 'Выберите чат'}
             className="lg:col-span-2"
           >
             <div className="space-y-4">
               <div className="flex items-center justify-between gap-3">
                 <Input
-                  label="API key"
-                  placeholder="Required for chat:message"
+                  label="API ключ"
+                  placeholder="Нужен для отправки в чат"
                   value={apiKey}
                   onChange={(e) => setApiKey(e.target.value)}
                 />
@@ -229,9 +229,9 @@ export function ChatsPage() {
                     ))}
                   </div>
                 ) : messagesQuery.isError ? (
-                  <div className="text-sm text-slate-300">Could not load messages.</div>
+                  <div className="text-sm text-slate-300">Не удалось загрузить сообщения.</div>
                 ) : activeChatId && messages.length === 0 ? (
-                  <div className="text-sm text-slate-300">No messages yet.</div>
+                  <div className="text-sm text-slate-300">Сообщений пока нет.</div>
                 ) : (
                   <div className="space-y-3">
                     <AnimatePresence initial={false}>
@@ -268,7 +268,7 @@ export function ChatsPage() {
                         className="flex justify-start"
                       >
                         <div className="max-w-[80%] rounded-2xl bg-white/5 px-4 py-3 text-sm text-slate-200 ring-1 ring-white/10">
-                          Assistant is typing…
+                          Ассистент печатает…
                         </div>
                       </motion.div>
                     ) : null}
@@ -281,15 +281,15 @@ export function ChatsPage() {
               <form className="flex items-end gap-3" onSubmit={onSend}>
                 <div className="flex-1">
                   <Input
-                    label="Message"
-                    placeholder={activeChatId ? 'Type your message…' : 'Select a chat first'}
+                    label="Сообщение"
+                    placeholder={activeChatId ? 'Введите сообщение…' : 'Сначала выберите чат'}
                     value={draft}
                     onChange={(e) => setDraft(e.target.value)}
                     disabled={!activeChatId}
                   />
                 </div>
                 <Button type="submit" variant="primary" disabled={!activeChatId || !draft.trim() || isSending}>
-                  {isSending ? 'Sending…' : 'Send'}
+                  {isSending ? 'Отправка…' : 'Отправить'}
                 </Button>
               </form>
             </div>

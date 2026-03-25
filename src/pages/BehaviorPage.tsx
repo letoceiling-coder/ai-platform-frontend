@@ -70,15 +70,15 @@ export function BehaviorPage() {
       steps: currentSteps,
       updatedAt: new Date().toISOString(),
     })
-    toast({ type: 'success', title: 'Behavior saved' })
+    toast({ type: 'success', title: 'Сценарий сохранён' })
   }
 
   function onReset() {
     if (!selectedId) return
-    if (!window.confirm('Reset behavior to default?')) return
+    if (!window.confirm('Сбросить сценарий к умолчанию?')) return
     const def = behavior.reset(selectedId)
     setSteps(def.steps)
-    toast({ type: 'success', title: 'Behavior reset' })
+    toast({ type: 'success', title: 'Сценарий сброшен' })
   }
 
   return (
@@ -86,32 +86,32 @@ export function BehaviorPage() {
       <div className="space-y-6">
         <div className="flex items-end justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-semibold tracking-tight text-white">Behavior</h1>
-            <p className="mt-2 max-w-2xl text-sm text-slate-300">Simple FSM prompts for assistant behavior</p>
+            <h1 className="text-3xl font-semibold tracking-tight text-white">Сценарий</h1>
+            <p className="mt-2 max-w-2xl text-sm text-slate-300">Пошаговые промпты (локально, FSM)</p>
           </div>
           <div className="flex items-center gap-2">
             <Button variant="secondary" onClick={() => setIsJsonOpen(true)} disabled={!selectedId}>
-              View JSON
+              JSON
             </Button>
             <Button variant="secondary" onClick={onReset} disabled={!selectedId}>
-              Reset to default
+              Сбросить
             </Button>
             <Button variant="primary" onClick={onSave} disabled={!selectedId || currentSteps.length === 0}>
-              Save behavior
+              Сохранить
             </Button>
           </div>
         </div>
 
-        <Card title="Assistant" description="Select assistant to edit behavior">
+        <Card title="Ассистент" description="Выберите ассистента для сценария">
           {assistants.isLoading ? (
             <div className="h-10 animate-pulse rounded-2xl border border-white/10 bg-slate-950/30" />
           ) : assistants.isError ? (
-            <div className="text-sm text-slate-300">Could not load assistants.</div>
+            <div className="text-sm text-slate-300">Не удалось загрузить ассистентов.</div>
           ) : assistantOptions.length === 0 ? (
-            <div className="text-sm text-slate-300">Create an assistant first.</div>
+            <div className="text-sm text-slate-300">Сначала создайте ассистента.</div>
           ) : (
             <label className="block">
-              <div className="text-sm text-slate-200">Assistant</div>
+              <div className="text-sm text-slate-200">Ассистент</div>
               <select
                 value={selectedId}
                 onChange={(e) => {
@@ -157,7 +157,7 @@ export function BehaviorPage() {
 
                       <div className="flex items-center gap-2">
                         <Button variant="ghost" size="sm" onClick={() => move(i, -1)} disabled={i === 0}>
-                          Up
+                          Вверх
                         </Button>
                         <Button
                           variant="ghost"
@@ -165,17 +165,17 @@ export function BehaviorPage() {
                           onClick={() => move(i, 1)}
                           disabled={i === currentSteps.length - 1}
                         >
-                          Down
+                          Вниз
                         </Button>
                         <Button variant="secondary" size="sm" onClick={() => toggleCollapsed(i)}>
-                          {step.collapsed ? 'Expand' : 'Collapse'}
+                          {step.collapsed ? 'Развернуть' : 'Свернуть'}
                         </Button>
                       </div>
                     </div>
 
                     {!step.collapsed ? (
                       <div className="p-6">
-                        <div className="text-sm text-slate-200">Prompt</div>
+                        <div className="text-sm text-slate-200">Промпт</div>
                         <textarea
                           className={textareaClassName()}
                           rows={6}
@@ -184,14 +184,14 @@ export function BehaviorPage() {
                           onChange={(e) => setPrompt(i, e.target.value)}
                         />
                         <div className="mt-2 text-xs text-slate-400">
-                          Keep prompts short and structured. This is frontend-only JSON for now.
+                          Короткие промпты работают лучше. Данные хранятся в браузере.
                         </div>
                       </div>
                     ) : (
                       <div className="p-6">
-                        <div className="text-sm text-slate-300">Collapsed</div>
+                        <div className="text-sm text-slate-300">Свёрнуто</div>
                         <div className="mt-2 text-xs text-slate-400">
-                          {step.prompt ? `${step.prompt.slice(0, 120)}${step.prompt.length > 120 ? '…' : ''}` : 'No prompt yet.'}
+                          {step.prompt ? `${step.prompt.slice(0, 120)}${step.prompt.length > 120 ? '…' : ''}` : 'Промпт пуст.'}
                         </div>
                       </div>
                     )}
@@ -229,11 +229,11 @@ export function BehaviorPage() {
             >
               <div className="flex items-start justify-between gap-4 border-b border-white/10 p-6">
                 <div>
-                  <div className="text-sm font-semibold tracking-tight text-white">Behavior JSON</div>
-                  <div className="mt-1 text-xs text-slate-300">Frontend-only structure (per assistant).</div>
+                  <div className="text-sm font-semibold tracking-tight text-white">JSON сценария</div>
+                  <div className="mt-1 text-xs text-slate-300">Структура в браузере, отдельно для каждого ассистента.</div>
                 </div>
                 <Button variant="secondary" onClick={() => setIsJsonOpen(false)}>
-                  Close
+                  Закрыть
                 </Button>
               </div>
 

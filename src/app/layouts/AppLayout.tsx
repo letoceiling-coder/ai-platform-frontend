@@ -3,13 +3,13 @@ import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../../store/auth.store'
 
 const navItems = [
-  { to: '/dashboard', label: 'Dashboard' },
-  { to: '/assistants', label: 'Assistants' },
-  { to: '/chats', label: 'Chats' },
-  { to: '/api-keys', label: 'API Keys' },
-  { to: '/documents', label: 'Knowledge' },
-  { to: '/behavior', label: 'Behavior' },
-  { to: '/widget', label: 'Widget' },
+  { to: '/dashboard', label: 'Обзор' },
+  { to: '/assistants', label: 'Ассистенты' },
+  { to: '/chats', label: 'Чаты' },
+  { to: '/api-keys', label: 'API ключи' },
+  { to: '/documents', label: 'База знаний' },
+  { to: '/behavior', label: 'Сценарий' },
+  { to: '/widget', label: 'Виджет' },
 ] as const
 
 function SidebarNavLink({ to, label }: { to: string; label: string }) {
@@ -53,7 +53,7 @@ export function AppLayout() {
         <div className="flex h-full flex-col p-4">
           <div className="rounded-2xl border border-white/10 bg-white/5 p-4 shadow-[0_10px_30px_rgba(0,0,0,0.35)]">
             <div className="text-xs font-medium tracking-[0.22em] text-slate-300">AI PLATFORM</div>
-            <div className="mt-1 text-sm font-semibold tracking-tight text-white">Console</div>
+            <div className="mt-1 text-sm font-semibold tracking-tight text-white">Консоль</div>
           </div>
 
           <nav className="mt-6 space-y-1">
@@ -64,7 +64,7 @@ export function AppLayout() {
 
           <div className="mt-auto pt-6">
             <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-              <div className="text-xs text-slate-300">Workspace</div>
+              <div className="text-xs text-slate-300">Окружение</div>
               <div className="mt-1 text-sm font-medium text-white">Production</div>
             </div>
           </div>
@@ -82,14 +82,14 @@ export function AppLayout() {
 
             <div className="flex items-center gap-3">
               <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-200">
-                user@example.com
+                Аккаунт
               </div>
               <button
                 className="rounded-xl border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-white/90 transition hover:bg-white/10 active:bg-white/5"
                 onClick={onLogout}
                 type="button"
               >
-                Logout
+                Выйти
               </button>
             </div>
           </div>
@@ -102,4 +102,3 @@ export function AppLayout() {
     </div>
   )
 }
-

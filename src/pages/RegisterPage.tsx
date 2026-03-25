@@ -5,29 +5,39 @@ import { api } from '../shared/config/api'
 import { useAuthStore } from '../store/auth.store'
 import { Button } from '../shared/ui/Button'
 import { Input } from '../shared/ui/Input'
+import { useToastStore } from '../store/toast.store'
 
-export function LoginPage() {
+export function RegisterPage() {
   const navigate = useNavigate()
   const setAuth = useAuthStore((s) => s.setAuth)
+  const toast = useToastStore((s) => s.push)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [confirm, setConfirm] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [error, setError] = useState<string | null>(null)
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault()
-    setError(null)
+    if (password.length < 6) {
+      toast({ type: 'error', title: 'Пароль должен быть не короче 6 символов' })
+      return
+    }
+    if (password !== confirm) {
+      toast({ type: 'error', title: 'Пароли не совпадают' })
+      return
+    }
     setIsSubmitting(true)
     try {
-      const res = await api.post('/auth/login', { email, password })
+      const res = await api.post('/auth/register', { email, password })
       const token = res?.data?.access_token
       if (typeof token !== 'string' || !token) {
-        throw new Error('Invalid login response')
+        throw new Error('Invalid register response')
       }
+      localStorage.setItem('token', token)
       setAuth(token, res?.data?.user ?? null)
       navigate('/dashboard', { replace: true })
-    } catch (_err) {
-      setError('Неверный email или пароль. Попробуйте снова.')
+    } catch {
+      toast({ type: 'error', title: 'Ошибка регистрации' })
     } finally {
       setIsSubmitting(false)
     }
@@ -36,8 +46,8 @@ export function LoginPage() {
   return (
     <div className="mx-auto flex min-h-full max-w-5xl items-center justify-center px-6 py-16">
       <div className="w-full max-w-md rounded-2xl border border-white/10 bg-white/5 p-6 shadow-xl">
-        <h1 className="text-xl font-semibold tracking-tight">Вход</h1>
-        <p className="mt-1 text-sm text-slate-300">Войдите в аккаунт</p>
+        <h1 className="text-xl font-semibold tracking-tight">Регистрация</h1>
+        <p className="mt-1 text-sm text-slate-300">Создайте аккаунт для доступа к платформе.</p>
 
         <form className="mt-6 space-y-3" onSubmit={onSubmit}>
           <Input
@@ -53,23 +63,32 @@ export function LoginPage() {
             label="Пароль"
             placeholder="••••••••"
             type="password"
-            autoComplete="current-password"
+            autoComplete="new-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            minLength={6}
+          />
+          <Input
+            label="Подтвердите пароль"
+            placeholder="••••••••"
+            type="password"
+            autoComplete="new-password"
+            value={confirm}
+            onChange={(e) => setConfirm(e.target.value)}
+            required
+            minLength={6}
           />
 
-          {error ? <div className="text-sm text-rose-300">{error}</div> : null}
-
           <Button type="submit" variant="primary" className="w-full" disabled={isSubmitting}>
-            {isSubmitting ? 'Вход…' : 'Войти'}
+            {isSubmitting ? 'Создание…' : 'Создать аккаунт'}
           </Button>
         </form>
 
         <p className="mt-6 text-center text-sm text-slate-400">
-          Нет аккаунта?{' '}
-          <Link className="font-medium text-indigo-300 hover:text-indigo-200" to="/register">
-            Зарегистрироваться
+          Уже есть аккаунт?{' '}
+          <Link className="font-medium text-indigo-300 hover:text-indigo-200" to="/login">
+            Войти
           </Link>
         </p>
       </div>
