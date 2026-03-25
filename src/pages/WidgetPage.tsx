@@ -171,7 +171,7 @@ export function WidgetPage() {
                   value={allowedDomainsText}
                   onChange={(e) => setAllowedDomainsText(e.target.value)}
                   disabled={!selectedKey?.key || setDomains.isPending}
-                  placeholder={'example.com\\nlocalhost\\n*.mysite.com'}
+                  placeholder={'example.com\nlocalhost\n*.mysite.com'}
                   className="mt-1 h-28 w-full resize-none rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-2.5 text-sm text-white/90 outline-none focus:border-white/20 focus:ring-2 focus:ring-indigo-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
                 />
                 <div className="mt-2 text-xs text-slate-400">
