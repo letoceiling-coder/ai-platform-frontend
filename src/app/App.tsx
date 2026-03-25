@@ -1,40 +1,25 @@
-import { Link, NavLink } from 'react-router-dom'
+import { useEffect } from 'react'
 import { AppRouter } from './router'
-
-const navLinkClassName = ({ isActive }: { isActive: boolean }) =>
-  [
-    'rounded-lg px-3 py-2 text-sm transition',
-    isActive ? 'bg-white/10 text-white' : 'text-slate-300 hover:bg-white/5 hover:text-white',
-  ].join(' ')
+import { useAuthStore } from '../store/auth.store'
+import { ToastHost } from '../shared/ui/ToastHost'
 
 export function App() {
-  return (
-    <div className="min-h-full">
-      <header className="border-b border-white/10 bg-slate-950/60 backdrop-blur">
-        <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-6 py-4">
-          <Link to="/dashboard" className="text-sm font-semibold tracking-tight">
-            AI Platform
-          </Link>
-          <nav className="flex items-center gap-1">
-            <NavLink to="/login" className={navLinkClassName}>
-              Login
-            </NavLink>
-            <NavLink to="/dashboard" className={navLinkClassName}>
-              Dashboard
-            </NavLink>
-            <NavLink to="/assistants" className={navLinkClassName}>
-              Assistants
-            </NavLink>
-            <NavLink to="/chats" className={navLinkClassName}>
-              Chats
-            </NavLink>
-          </nav>
-        </div>
-      </header>
+  useEffect(() => {
+    useAuthStore.getState().init()
+  }, [])
 
-      <main>
+  return (
+    <div className="relative min-h-full overflow-hidden">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-40 left-1/2 h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-gradient-to-br from-indigo-500/18 via-cyan-400/8 to-transparent blur-3xl" />
+        <div className="absolute -bottom-56 right-[-120px] h-[520px] w-[520px] rounded-full bg-gradient-to-br from-fuchsia-500/14 via-indigo-500/8 to-transparent blur-3xl" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.06),transparent_40%)]" />
+      </div>
+
+      <div className="relative">
         <AppRouter />
-      </main>
+      </div>
+      <ToastHost />
     </div>
   )
 }
