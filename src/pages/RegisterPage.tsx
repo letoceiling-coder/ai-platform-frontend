@@ -28,13 +28,14 @@ export function RegisterPage() {
     }
     setIsSubmitting(true)
     try {
-      const res = await api.post('/auth/register', { email, password })
-      const token = res?.data?.access_token
+      await api.post('/auth/register', { email, password })
+      const loginRes = await api.post('/auth/login', { email, password })
+      const token = loginRes?.data?.access_token
       if (typeof token !== 'string' || !token) {
-        throw new Error('Invalid register response')
+        throw new Error('Invalid login after register')
       }
       localStorage.setItem('token', token)
-      setAuth(token, res?.data?.user ?? null)
+      setAuth(token, loginRes?.data?.user ?? null)
       navigate('/dashboard', { replace: true })
     } catch {
       toast({ type: 'error', title: 'Ошибка регистрации' })
