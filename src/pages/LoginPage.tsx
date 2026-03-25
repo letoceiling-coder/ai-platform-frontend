@@ -20,7 +20,7 @@ export function LoginPage() {
     setIsSubmitting(true)
     try {
       const res = await api.post('/auth/login', { email, password })
-      const token = res?.data?.token
+      const token = res?.data?.access_token
       if (typeof token !== 'string' || !token) {
         throw new Error('Invalid login response')
       }
